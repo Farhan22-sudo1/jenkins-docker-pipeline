@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CREDENTIALS = credentials('dockerhub-credentials') // Set this ID in Jenkins Credentials
-        IMAGE_NAME = 'farhan221/myapp'
+        DOCKER_CREDENTIALS = credentials('dockerhub-credentials') // This ID must match Jenkins Credentials
+        IMAGE_NAME = 'farhan221/myapp' // Your Docker Hub repo
         IMAGE_TAG = 'latest'
     }
 
