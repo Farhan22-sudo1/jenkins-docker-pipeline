@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_CREDENTIALS = credentials('dockerhub-credentials') // This ID must match Jenkins Credentials
-        IMAGE_NAME = 'farhan221/myapp' // Your Docker Hub repo
-        IMAGE_TAG = 'latest'
+        DOCKER_IMAGE = 'farhan221/myapp:latest'
+        DOCKER_CREDENTIALS = credentials('dockerhub-credentials')
     }
 
     stages {
@@ -18,23 +17,21 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo 'Building Docker image...'
-                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+                sh "docker build -t $DOCKER_IMAGE ."
             }
         }
 
         stage('Docker Login') {
             steps {
-                echo 'Logging into Docker Hub...'
-                sh '''
-                    echo "$DOCKER_CREDENTIALS_PSW" | docker login -u "$DOCKER_CREDENTIALS_USR" --password-stdin
-                '''
+                echo 'Logging in to Docker Hub...'
+                sh "echo $DOCKER_CREDENTIALS_PSW | docker login -u $DOCKER_CREDENTIALS_USR --password-stdin"
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                echo 'Pushing Docker image to Docker Hub...'
-                sh 'docker push $IMAGE_NAME:$IMAGE_TAG'
+                echo 'Pushing Docker image...'
+                sh "docker push $DOCKER_IMAGE"
             }
         }
     }
